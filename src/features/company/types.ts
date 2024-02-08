@@ -5,8 +5,6 @@ export interface Company {
   address: string;
 }
 
-export enum CompanyKeys {
-  name = 'Название',
-  employeesCount = 'Кол-во сотрудников',
-  address = 'Адрес',
+export interface CeilNames {
+  [key: string]: string;
 }

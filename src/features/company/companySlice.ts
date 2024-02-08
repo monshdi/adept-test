@@ -1,13 +1,13 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {Company} from "./types";
-import companies from './data';
+import data from './data';
 
 interface State {
   data: Company[]
 }
 
 const initialState: State = {
-  data: companies,
+  data,
 }
 
 
