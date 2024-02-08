@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import './App.css';
-import Table from "./components/Table";
+import './App.module.scss';
+import Table from "./components/Table/Table";
 import {useSelector} from "react-redux";
 import {selectAllCompanies} from "./features/company/selectors";
 import {CeilNames} from "./constants/type";
 import {selectEmployeesByIds} from "./features/employees/selectors";
 import {RootState} from "./store";
+import s from './App.module.scss';
 
 const companyCeilNames: CeilNames = {
   name: 'Название',
@@ -27,19 +28,21 @@ function App() {
   const employees = useSelector((state: RootState) => selectEmployeesByIds(state, selectedCompanies));
 
   return (
-    <div>
+    <div className={s.wrapper}>
       <Table
         data={companies}
         cellNames={companyCeilNames}
         selectedRows={selectedCompanies}
         setSelectedRows={setSelectedCompanies}
       />
-      <Table
-        data={employees}
-        cellNames={employeeCeilNames}
-        selectedRows={selectedEmployees}
-        setSelectedRows={setSelectedEmployees}
-      />
+      {selectedCompanies.length > 0 && (
+        <Table
+          data={employees}
+          cellNames={employeeCeilNames}
+          selectedRows={selectedEmployees}
+          setSelectedRows={setSelectedEmployees}
+        />
+      )}
     </div>
   );
 }

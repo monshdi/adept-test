@@ -1,0 +1,17 @@
+@use '../../styles/variables' as *;
+
+.button {
+  background-color: $accent;
+  border: none;
+  padding: 16px 24px;
+  cursor: pointer;
+  transition: background-color 0.2s linear;
+  
+  &:hover {
+    background-color: lighten($accent, 10%);
+  }
+
+  &:active {
+    background-color: darken($accent, 10%);
+  }
+}
