@@ -7,6 +7,8 @@ import {CeilNames} from "./constants/type";
 import {selectEmployeesByIds} from "./features/employees/selectors";
 import {RootState} from "./store";
 import s from './App.module.scss';
+import {deleteCompany} from "./features/company/companySlice";
+import {deleteEmployee} from "./features/employees/employeesSlice";
 
 const companyCeilNames: CeilNames = {
   name: 'Название',
@@ -34,6 +36,7 @@ function App() {
         cellNames={companyCeilNames}
         selectedRows={selectedCompanies}
         setSelectedRows={setSelectedCompanies}
+        deleteAction={deleteCompany}
       />
       {selectedCompanies.length > 0 && (
         <Table
@@ -41,6 +44,7 @@ function App() {
           cellNames={employeeCeilNames}
           selectedRows={selectedEmployees}
           setSelectedRows={setSelectedEmployees}
+          deleteAction={deleteEmployee}
         />
       )}
     </div>

@@ -4,20 +4,26 @@ import s from './Table.module.scss'
 import {clsx} from "clsx";
 import Icon from "../Icon/Icon";
 import Button from "../Button/Button";
+import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
+import {useAppDispatch} from "../../hooks/hooks";
+
 
 interface Props<T> {
   data: T[];
   cellNames: {[key: string]: string};
   selectedRows: number[];
-  setSelectedRows: (id: number[]) => void;
+  setSelectedRows: (ids: number[]) => void;
+  deleteAction: ActionCreatorWithPayload<number[], any>;
 }
 
 function Table<T extends { id: number }>({
   data,
   cellNames,
   selectedRows,
-  setSelectedRows
+  setSelectedRows,
+  deleteAction,
 }: Props<T>): FunctionComponentElement<Props<T>> {
+  const dispatch = useAppDispatch();
 
   const onSelectAll = () => {
     if (selectedRows.length === data.length) {
@@ -37,6 +43,11 @@ function Table<T extends { id: number }>({
       setSelectedRows(newData);
     }
   }
+
+  const onDelete = () => {
+    dispatch(deleteAction(selectedRows))
+  }
+
   return (
     <div className={s.wrapper}>
       <table cellSpacing={0}>
@@ -64,7 +75,7 @@ function Table<T extends { id: number }>({
         </tbody>
       </table>
       <div>
-        <Button onClick={() => alert('delete')}><Icon name="trash" className={s.icon} /></Button>
+        <Button onClick={onDelete} disabled={!selectedRows.length}><Icon name="trash" className={s.icon} /></Button>
         <Button onClick={() => alert('delete')}><Icon name="plus" className={s.icon} /></Button>
       </div>
     </div>
