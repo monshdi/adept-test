@@ -1,0 +1,8 @@
+@use '../../styles/variables' as *;
+
+.cell {
+  text-align: left;
+  min-width: 140px;
+  border-bottom: 1px solid $dark-gray;
+  padding: 10px 15px;
+}
