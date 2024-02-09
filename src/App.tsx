@@ -1,16 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import './App.module.scss';
 import Table from "./components/Table/Table";
 import {useSelector} from "react-redux";
 import {getCompaniesStatus, selectAllCompanies} from "./features/company/selectors";
-import {CeilNames} from "./constants/type";
+import {CeilNames} from "./features/type";
 import {getEmployeeStatus, selectEmployeesByIds} from "./features/employees/selectors";
 import {RootState} from "./store";
 import s from './App.module.scss';
-import {deleteCompany} from "./features/company/companySlice";
-import {deleteEmployee} from "./features/employees/employeesSlice";
 import {useAppDispatch} from "./hooks/hooks";
 import {getCompanies, getEmployees} from "./features/thunks";
+import {deleteCompanyAction, deleteEmployeesAction} from "./features/actions";
 
 const companyCeilNames: CeilNames = {
   name: 'Название',
@@ -44,6 +43,20 @@ function App() {
       dispatch(getEmployees());
     }
   }, []);
+
+  const deleteCompany = useCallback((ids: string[]) => {
+    dispatch(deleteCompanyAction(ids))
+    setSelectedCompanies((prevState) => prevState.filter((id) => !ids.includes(id)))
+  }, [])
+
+  const deleteEmployee = useCallback((ids: string[]) => {
+    const companyIds = ids.map((id) => {
+      const employee = employees.find((e) => e.id === id);
+      return employee ? employee.companyId : 0;
+    })
+    dispatch(deleteEmployeesAction(ids, companyIds))
+    setSelectedEmployees((prevState) => prevState.filter((id) => !ids.includes(id)))
+  }, [employees])
 
   return (
     <div className={s.wrapper}>

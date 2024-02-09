@@ -1,6 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { Employee } from './types';
 import {getEmployees} from "../thunks";
+import {deleteEmployeesAction} from "../actions";
 
 interface EmployeesState {
   data: Employee[];
@@ -24,6 +25,10 @@ export const employeesSlice = createSlice({
     builder.addCase(getEmployees.fulfilled, (state, { payload }: PayloadAction<Employee[]>) => {
       state.data = payload;
       state.status = 'loaded';
+    });
+
+    builder.addCase(deleteEmployeesAction, (state, { payload }: PayloadAction<{ids: string[], companyIds: number[]}>) => {
+      state.data = state.data.filter((item) => !payload.ids.includes(item.id));
     })
   }
 })

@@ -4,16 +4,13 @@ import s from './Table.module.scss'
 import {clsx} from "clsx";
 import Icon from "../Icon/Icon";
 import Button from "../Button/Button";
-import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
-import {useAppDispatch} from "../../hooks/hooks";
-
 
 interface Props<T> {
   data: T[];
   cellNames: {[key: string]: string};
   selectedRows: string[];
   setSelectedRows: (ids: string[]) => void;
-  deleteAction: ActionCreatorWithPayload<string[], any>;
+  deleteAction: (ids: string[]) => void;
 }
 
 function Table<T extends { id: string }>({
@@ -23,7 +20,6 @@ function Table<T extends { id: string }>({
   setSelectedRows,
   deleteAction,
 }: Props<T>): FunctionComponentElement<Props<T>> {
-  const dispatch = useAppDispatch();
 
   const onSelectAll = () => {
     if (selectedRows.length === data.length) {
@@ -45,7 +41,7 @@ function Table<T extends { id: string }>({
   }
 
   const onDelete = () => {
-    dispatch(deleteAction(selectedRows))
+    deleteAction(selectedRows)
   }
 
   return (
