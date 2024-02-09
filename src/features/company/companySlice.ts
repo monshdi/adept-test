@@ -2,7 +2,8 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Company} from "./types";
 import {getCompanies, getEmployees} from "../thunks";
 import {Employee} from "../employees/types";
-import {deleteCompanyAction, deleteEmployeesAction} from "../actions";
+import {deleteCompanyAction, deleteEmployeesAction, editItemAction} from "../actions";
+import {EditAction} from "../type";
 
 interface State {
   data: Company[]
@@ -55,7 +56,6 @@ export const companySlice = createSlice({
 
     builder.addCase(deleteEmployeesAction, (state, { payload }: PayloadAction<{ids: string[], companyIds: number[]}>) => {
       const { companyIds } = payload;
-      console.log(payload);
       companyIds.forEach((id) => {
         const found = state.data.find((item) => parseInt(item.id) === id);
         if (found) {
@@ -63,6 +63,17 @@ export const companySlice = createSlice({
         }
       })
     })
+
+    builder.addCase(editItemAction, (state, { payload }: PayloadAction<EditAction>) => {
+      const { type, id, field, value} = payload;
+
+      if (type === 'company') {
+        const found = state.data.find((item) => item.id === id);
+        if (found) {
+          (found as any)[field] = value;
+        }
+      }
+    });
   }
 });
 

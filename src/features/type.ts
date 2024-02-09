@@ -1,8 +1,10 @@
-export interface CeilNames {
-  [key: string]: string;
+export interface CellNames {
+  [key: string]: {name: string, editable: boolean};
 }
 
-export enum SliceNames {
-  EMPLOYEES = 'employees',
-  COMPANY = 'company,'
+export interface EditAction {
+  type: string;
+  id: string;
+  field: string;
+  value: string;
 }

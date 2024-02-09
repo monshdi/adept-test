@@ -4,13 +4,15 @@ import s from './Table.module.scss'
 import {clsx} from "clsx";
 import Icon from "../Icon/Icon";
 import Button from "../Button/Button";
+import {CellNames} from "../../features/type";
 
 interface Props<T> {
   data: T[];
-  cellNames: {[key: string]: string};
+  cellNames: CellNames;
   selectedRows: string[];
   setSelectedRows: (ids: string[]) => void;
   deleteAction: (ids: string[]) => void;
+  onEdit: (id: string, name: string, value: string) => void;
 }
 
 function Table<T extends { id: string }>({
@@ -19,6 +21,7 @@ function Table<T extends { id: string }>({
   selectedRows,
   setSelectedRows,
   deleteAction,
+  onEdit
 }: Props<T>): FunctionComponentElement<Props<T>> {
 
   const onSelectAll = () => {
@@ -52,8 +55,8 @@ function Table<T extends { id: string }>({
           <th>
             <input type="checkbox" onChange={onSelectAll} checked={selectedRows.length === data.length} />
           </th>
-          {Object.values(cellNames).map((name) => (
-            <Cell key={name} value={name} />
+          {Object.values(cellNames).map((value) => (
+            <Cell key={value.name} value={value.name} />
           ))}
         </tr>
         </thead>
@@ -63,8 +66,15 @@ function Table<T extends { id: string }>({
             <th>
               <input type="checkbox" onChange={() => onSelectRow(item.id)} checked={selectedRows.includes(item.id)} />
             </th>
-            {Object.keys(cellNames).map((key) => (
-              <Cell key={`${item.id}-${key}`} value={(item as any)[key]} />
+            {Object.entries(cellNames).map(([key, value]) => (
+              <Cell
+                id={item.id}
+                onEdit={onEdit}
+                key={`${item.id}-${key}`}
+                value={(item as any)[key]}
+                name={key}
+                editable={value.editable}
+              />
             ))}
           </tr>
         ))}

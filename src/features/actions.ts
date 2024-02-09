@@ -8,3 +8,12 @@ export const deleteEmployeesAction = createAction('employees/delete', (ids: stri
     companyIds,
   }
 }));
+
+export const editItemAction = createAction('edit', (type: string, id: string, field: string, value: string) => ({
+  payload: {
+    type,
+    id,
+    field,
+    value
+  }
+}))
