@@ -1,22 +1,31 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { Employee } from './types';
-import data from './data';
+import {getEmployees} from "../thunks";
+
 interface EmployeesState {
-  data: Employee[]
+  data: Employee[];
+  status: 'idle' | 'loaded';
 }
 
 const initialState: EmployeesState = {
-  data,
+  data: [],
+  status: "idle",
 }
 
 export const employeesSlice = createSlice({
   name: 'employees',
   initialState,
   reducers: {
-    deleteEmployee: (state, { payload }: PayloadAction<number[]>) => {
+    deleteEmployee: (state, { payload }: PayloadAction<string[]>) => {
       state.data = state.data.filter((item) => !payload.includes(item.id));
     }
   },
+  extraReducers: (builder) => {
+    builder.addCase(getEmployees.fulfilled, (state, { payload }: PayloadAction<Employee[]>) => {
+      state.data = payload;
+      state.status = 'loaded';
+    })
+  }
 })
 
 export const { deleteEmployee } = employeesSlice.actions;

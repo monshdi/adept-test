@@ -11,12 +11,12 @@ import {useAppDispatch} from "../../hooks/hooks";
 interface Props<T> {
   data: T[];
   cellNames: {[key: string]: string};
-  selectedRows: number[];
-  setSelectedRows: (ids: number[]) => void;
-  deleteAction: ActionCreatorWithPayload<number[], any>;
+  selectedRows: string[];
+  setSelectedRows: (ids: string[]) => void;
+  deleteAction: ActionCreatorWithPayload<string[], any>;
 }
 
-function Table<T extends { id: number }>({
+function Table<T extends { id: string }>({
   data,
   cellNames,
   selectedRows,
@@ -34,7 +34,7 @@ function Table<T extends { id: number }>({
     }
   }
 
-  const onSelectRow = (id: number) => {
+  const onSelectRow = (id: string) => {
     if (selectedRows.includes(id)) {
       const newData = selectedRows.filter((item) => item !== id);
       setSelectedRows(newData);
