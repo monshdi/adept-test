@@ -18,8 +18,17 @@ export const employeesSlice = createSlice({
   name: 'employees',
   initialState,
   reducers: {
-    deleteEmployee: (state, { payload }: PayloadAction<string[]>) => {
-      state.data = state.data.filter((item) => !payload.includes(item.id));
+    addNewEmployee: (state, { payload }: PayloadAction<string>) => {
+      state.data = [
+        ...state.data,
+        {
+          id: String(Date.now),
+          name: '',
+          lastName: '',
+          companyId: parseInt(payload),
+          post: '',
+        } as Employee,
+      ]
     }
   },
   extraReducers: (builder) => {
@@ -45,6 +54,6 @@ export const employeesSlice = createSlice({
   }
 })
 
-export const { deleteEmployee } = employeesSlice.actions;
+export const {addNewEmployee} = employeesSlice.actions;
 
 export default employeesSlice.reducer;

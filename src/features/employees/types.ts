@@ -5,9 +5,3 @@ export interface Employee {
   post: string;
   companyId: number;
 }
-
-export enum EmployeeKeys {
-  lastName = 'Фамилия',
-  name = 'Имя',
-  post = 'Должность',
-}

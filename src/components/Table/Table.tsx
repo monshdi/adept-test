@@ -13,6 +13,8 @@ interface Props<T> {
   setSelectedRows: (ids: string[]) => void;
   deleteAction: (ids: string[]) => void;
   onEdit: (id: string, name: string, value: string) => void;
+  onClickAddButton: () => void;
+  canAddElement?: boolean;
 }
 
 function Table<T extends { id: string }>({
@@ -21,7 +23,9 @@ function Table<T extends { id: string }>({
   selectedRows,
   setSelectedRows,
   deleteAction,
-  onEdit
+  onEdit,
+  onClickAddButton,
+  canAddElement = true,
 }: Props<T>): FunctionComponentElement<Props<T>> {
 
   const onSelectAll = () => {
@@ -82,7 +86,9 @@ function Table<T extends { id: string }>({
       </table>
       <div>
         <Button onClick={onDelete} disabled={!selectedRows.length}><Icon name="trash" className={s.icon} /></Button>
-        <Button onClick={() => alert('delete')}><Icon name="plus" className={s.icon} /></Button>
+        {canAddElement && (
+          <Button onClick={onClickAddButton}><Icon name="plus" className={s.icon} /></Button>
+        )}
       </div>
     </div>
   )

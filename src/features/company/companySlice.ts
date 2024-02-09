@@ -4,6 +4,7 @@ import {getCompanies, getEmployees} from "../thunks";
 import {Employee} from "../employees/types";
 import {deleteCompanyAction, deleteEmployeesAction, editItemAction} from "../actions";
 import {EditAction} from "../type";
+import {addNewEmployee, employeesSlice} from "../employees/employeesSlice";
 
 interface State {
   data: Company[]
@@ -19,20 +20,16 @@ export const companySlice = createSlice({
   name: 'company',
   initialState,
   reducers: {
-    incrementCompanyEmployeesCount: (state, {payload}: PayloadAction<string>) => {
-      state.data = state.data.map((item) => {
-        if (item.id === payload) {
-          return {
-            ...item,
-            employeesCount: item.employeesCount + 1,
-          }
-        }
-
-        return item;
-      })
-    },
-    deleteCompany: (state, {payload}: PayloadAction<string[]>) => {
-      state.data = state.data.filter((item) => !payload.includes(item.id));
+    addNewCompany: (state) => {
+      state.data = [
+        ...state.data,
+        {
+          id: String(Date.now()),
+          name: '',
+          address: '',
+          employeesCount: 0,
+        } as Company
+      ]
     }
   },
   extraReducers: (builder) => {
@@ -50,12 +47,15 @@ export const companySlice = createSlice({
       }
     });
 
-    builder.addCase(deleteCompanyAction, (state, { payload }: PayloadAction<string[]>) => {
+    builder.addCase(deleteCompanyAction, (state, {payload}: PayloadAction<string[]>) => {
       state.data = state.data.filter((item) => !payload.includes(item.id))
     });
 
-    builder.addCase(deleteEmployeesAction, (state, { payload }: PayloadAction<{ids: string[], companyIds: number[]}>) => {
-      const { companyIds } = payload;
+    builder.addCase(deleteEmployeesAction, (state, {payload}: PayloadAction<{
+      ids: string[],
+      companyIds: number[]
+    }>) => {
+      const {companyIds} = payload;
       companyIds.forEach((id) => {
         const found = state.data.find((item) => parseInt(item.id) === id);
         if (found) {
@@ -64,8 +64,8 @@ export const companySlice = createSlice({
       })
     })
 
-    builder.addCase(editItemAction, (state, { payload }: PayloadAction<EditAction>) => {
-      const { type, id, field, value} = payload;
+    builder.addCase(editItemAction, (state, {payload}: PayloadAction<EditAction>) => {
+      const {type, id, field, value} = payload;
 
       if (type === 'company') {
         const found = state.data.find((item) => item.id === id);
@@ -74,9 +74,16 @@ export const companySlice = createSlice({
         }
       }
     });
+
+    builder.addCase(addNewEmployee, (state, { payload }: PayloadAction<string>) => {
+      const found = state.data.find((item) => item.id === payload);
+      if (found) {
+        found.employeesCount += 1;
+      }
+    })
   }
 });
 
-export const {incrementCompanyEmployeesCount, deleteCompany} = companySlice.actions;
+export const {addNewCompany} = companySlice.actions;
 
 export default companySlice.reducer;

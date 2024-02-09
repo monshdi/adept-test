@@ -10,6 +10,8 @@ import s from './App.module.scss';
 import {useAppDispatch} from "./hooks/hooks";
 import {getCompanies, getEmployees} from "./features/thunks";
 import {deleteCompanyAction, deleteEmployeesAction, editItemAction} from "./features/actions";
+import {addNewCompany} from "./features/company/companySlice";
+import {addNewEmployee} from "./features/employees/employeesSlice";
 
 const companyCeilNames: CellNames = {
   name: {
@@ -82,6 +84,14 @@ function App() {
     }
   }
 
+  const onAddCompany = () => {
+    dispatch(addNewCompany());
+  }
+
+  const onAddEmployee = () => {
+    dispatch(addNewEmployee(selectedCompanies[0]));
+  }
+
   return (
     <div className={s.wrapper}>
       <Table
@@ -91,6 +101,7 @@ function App() {
         setSelectedRows={setSelectedCompanies}
         deleteAction={deleteCompany}
         onEdit={onEdit('company')}
+        onClickAddButton={onAddCompany}
       />
       {selectedCompanies.length > 0 && (
         <Table
@@ -100,6 +111,8 @@ function App() {
           setSelectedRows={setSelectedEmployees}
           deleteAction={deleteEmployee}
           onEdit={onEdit('employees')}
+          onClickAddButton={onAddEmployee}
+          canAddElement={selectedCompanies.length === 1}
         />
       )}
     </div>
